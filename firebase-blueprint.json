@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "InsuranceProduct": {
+      "title": "Insurance Product",
+      "description": "A life or non-life insurance product available for purchase.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["Life", "Non-Life"] },
+        "category": { "type": "string", "description": "e.g., Travel, Motor, Health, Savings" },
+        "description": { "type": "string" },
+        "premium": { "type": "number" },
+        "benefits": { "type": "array", "items": { "type": "string" } },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["id", "name", "type", "premium"]
+    },
+    "InsuranceApplication": {
+      "title": "Insurance Application",
+      "description": "An application submitted by a customer for an insurance product.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending", "Paid", "Approved", "Rejected"] },
+        "customerDetails": {
+          "type": "object",
+          "properties": {
+            "fullName": { "type": "string" },
+            "email": { "type": "string" },
+            "phone": { "type": "string" },
+            "address": { "type": "string" }
+          }
+        },
+        "paymentId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "status"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment transaction for an insurance application.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "applicationId": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["Credit Card", "Debit Card", "GCash", "PayMaya"] },
+        "status": { "type": "string", "enum": ["Pending", "Completed", "Failed"] },
+        "qrCodeData": { "type": "string", "description": "Base64 or URL for the generated QR code" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["applicationId", "amount", "method", "status"]
+    }
+  },
+  "firestore": {
+    "/products": {
+      "schema": "InsuranceProduct",
+      "description": "Available insurance products."
+    },
+    "/applications": {
+      "schema": "InsuranceApplication",
+      "description": "Customer applications for insurance."
+    },
+    "/payments": {
+      "schema": "Payment",
+      "description": "Payment records for applications."
+    }
+  }
+}
